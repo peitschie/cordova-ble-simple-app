@@ -26,8 +26,13 @@ function onDeviceReady() {
 
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
     document.getElementById('deviceready').classList.add('ready');
-    ble.isEnabled(() => window.alert("Bluetooth enabled"), () => window.alert("Bluetooth disabled"));
+
+    const bleStatus = document.getElementById("blestatus");
+    const logText = (data) => bleStatus.appendChild(document.createTextNode(data + "\n"));
+    ble.isEnabled(
+        () => logText("Bluetooth enabled"), 
+        () => logText("Bluetooth disabled"));
     ble.scan([], 10, 
-        (data) => window.alert("Device found" + data.name + " " + data.id), 
-        (e) => window.alert("Unable to scan Bluetooth"));
+        (data) => logText("Device found:\n    " + data.name + "\n    " + data.id), 
+        (e) => logText("Unable to scan Bluetooth:\n" + e));
 }
